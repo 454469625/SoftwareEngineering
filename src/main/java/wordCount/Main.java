@@ -1,7 +1,10 @@
-package wordCount;
+package cn.lu.wordcount;
+
+import cn.lu.wordcount.CountUtils;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 public class Main{
         private static boolean isCountchar = false;
         private static boolean isCountword = false;
@@ -10,10 +13,15 @@ public class Main{
         private static boolean isCountdiffline = false;
         //利用arraylist存储符合条件的文件的绝对路径
         private static ArrayList<String> fileList = new ArrayList<String>();
+        private static Scanner scanner;
 
         public static void main(String[] args) throws IOException,ArrayIndexOutOfBoundsException{
+
+            /*此处在exe中测试出错，因此改用另一种方法，用scanner
+
+
             //此处args似乎越界了也许我应该给它分配一个空间？
-            //args = new String[6];
+            //args = new String[2];
             //运行报错了但是测试可以通过
             //默认最后一个参数为路径名
             String path = args[args.length-1];
@@ -35,6 +43,38 @@ public class Main{
                 if(args[i].equals("-a")){
                     isCountdiffline = true;
                 }
+            }
+
+
+            */
+            //方法二，用scanner获取输入
+            //switch匹配字符好像只在1.7版本以上才可以
+            CountUtils countUtils = new CountUtils();
+            String opera = null;
+            String path = null;
+            scanner = new Scanner(System.in);
+            System.out.println("请输入你要执行的操作：");
+            opera = scanner.nextLine();
+            System.out.println("请输入你要操作的文件绝对路径：");
+            path = scanner.nextLine();
+            switch (opera) {
+                case "-c":
+                    isCountchar = true;
+                    break;
+                case "-w":
+                    isCountword = true;
+                    break;
+                case "-l":
+                    isCountline = true;
+                    break;
+                case "-s":
+                    isRecursion = true;
+                    break;
+                case "-a":
+                    isCountdiffline = true;
+                    break;
+                default:
+                    System.out.println("操作不存在.");
             }
             //获取目录名
             //split 里面的参数是正则表达式，在Java里面用字符串表示正则表达式时，

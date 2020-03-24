@@ -1,4 +1,4 @@
-package wordCount;
+package cn.lu.wordcount;
 
 import java.io.*;
 import java.util.ArrayList;

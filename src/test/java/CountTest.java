@@ -8,6 +8,6 @@ public class CountTest {
 
     @Test
     public void test() throws IOException {
-        Main.main(new String[]{"-s","-c","-w","-l","-a","C:\\WordCountTest\\2.txt"});
+        Main.main(new String[]{"-a","C:\\WordCountTest\\2.txt"});
     }
 }

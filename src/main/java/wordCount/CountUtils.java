@@ -1,12 +1,14 @@
 package wordCount;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+/**
+ * 部分引用：https://www.cnblogs.com/yw0219/p/8047938.html，https://www.cnblogs.com/happyOwen/p/9646411.html
+ *
+ */
 
 public class CountUtils {
 
@@ -15,23 +17,25 @@ public class CountUtils {
         File file = new File(path);
         BufferedReader br = null;
         String line;
-        int charNum = 0;
+        int charCount = 0;
         try {
             br = new BufferedReader(new FileReader(file));
             while ((line = br.readLine()) != null) {
                 char[] chars = line.toCharArray();
                 for (int i = 0; i < chars.length; i++) {
+                    //Character 类用于对单个字符进行操作
+                    //若不是空格，则字符数加1
                     if (!Character.isWhitespace(chars[i])) {
-                        charNum++;
+                        charCount++;
                     }
                 }
             }
-            System.out.println("the charCount is:" + charNum);
+            System.out.println("the charCount is:" + charCount);
             br.close();
         } catch (Exception e) {
             System.out.println(path+"文件名错误");
         }
-        return charNum;
+        return charCount;
     }
 
 
@@ -44,7 +48,7 @@ public class CountUtils {
         String line;
         String[] strings;
         StringBuffer sbf = new StringBuffer();
-        int wordNum = 0;
+        int wordCount = 0;
         String reg = "\\s+";
         try {
             br = new BufferedReader(new FileReader(path));
@@ -52,40 +56,40 @@ public class CountUtils {
                 sbf.append(line);
             }
             //将不是英文字母的字符替换成空格
-            String s = sbf.toString().replaceAll("[^a-zA-Z]", " ");
+            String s = sbf.toString().replaceAll("[^A-Za-z]", " ");
             strings = s.split(reg);
-            wordNum = strings.length;
-            System.out.println("the wordcount is;"+wordNum);
+            wordCount = strings.length;
+            System.out.println("the wordcount is;"+wordCount);
             br.close();
         }catch (Exception e){
             System.out.println(path+"文件名错误");
         }
-        return wordNum;
+        return wordCount;
     }
 
     //-l    统计总行数
     public int countLine(String path) {
         BufferedReader br = null;
         String line;
-        int lineNum = 0;
+        int lineCount = 0;
         try {
             br = new BufferedReader(new FileReader(path));
             while ((line = br.readLine()) != null) {
-                lineNum++;
+                lineCount++;
             }
-            System.out.println("the lineCount is:"+lineNum);
+            System.out.println("the lineCount is:"+lineCount);
             br.close();
         }catch (Exception e){
             System.out.println(path+"文件名错误");
         }
-        return lineNum;
+        return lineCount;
     }
 
     //-a    统计注释行、空行、代码行
     public void countDiffline(String path) {
-        int annotationLineNum = 0;
-        int codeLineNum = 0;
-        int nullLineNum = 0;
+        int annotationLineCount = 0;
+        int codeLineCount = 0;
+        int spaceLineCount = 0;
         String line;
         BufferedReader br = null;
         //注释匹配器（匹配单行、多行、文档注释）
@@ -95,17 +99,17 @@ public class CountUtils {
             while ((line = br.readLine()) != null) {
                 if (annotationLinePattern.matcher(line).find()) {
                     //注释行
-                    annotationLineNum++;
+                    annotationLineCount++;
                 } else if (line.matches("\\s*\\p{Graph}?\\s*")) {
                     //空行
-                    nullLineNum++;
+                    spaceLineCount++;
                 } else {
-                    codeLineNum++;
+                    codeLineCount++;
                 }
             }
-            System.out.println("the nullLineNum is:" + nullLineNum);
-            System.out.println("the annotationLineNum is:" + annotationLineNum);
-            System.out.println("the codeLineNum is:" + codeLineNum);
+            System.out.println("the nullLineNum is:" + spaceLineCount);
+            System.out.println("the annotationLineNum is:" + annotationLineCount);
+            System.out.println("the codeLineNum is:" + codeLineCount);
             br.close();
         } catch (Exception e) {
             System.out.println(path+"文件名错误");
@@ -121,10 +125,10 @@ public class CountUtils {
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             if (files!=null){
-                for (File file1 : files) {
+                for (File f : files) {
                     //当file1仍然是目录时，递归调用此函数
-                    if (file1.isDirectory()) {
-                        getRecursionFiles(dirName+"\\"+file1.getName(),fileName);
+                    if (f.isDirectory()) {
+                        getRecursionFiles(dirName+"\\"+f.getName(),fileName);
                     }else{
                         //处理后的fileName作为匹配规则，对遍历的文件进行匹配
                         //pattern 对象是一个正则表达式的编译表示。Pattern 类没有公共构造方法。
@@ -133,9 +137,9 @@ public class CountUtils {
                         Pattern pattern = Pattern.compile(fileName);
                         //Matcher 对象是对输入字符串进行解释和匹配操作的引擎。Matcher 也没有公共构造方法。
                         // 需要调用 Pattern 对象的 matcher 方法来获得一个 Matcher 对象
-                        Matcher m = pattern.matcher(file1.getName());
+                        Matcher m = pattern.matcher(f.getName());
                         if (m.matches()) {
-                            fileList.add(dirName+"\\"+file1.getName());
+                            fileList.add(dirName+"\\"+f.getName());
                         }
                     }
                 }
@@ -150,12 +154,12 @@ public class CountUtils {
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             if (files != null) {
-                for (File file1 : files) {
-                    if (!file1.isDirectory()) {
+                for (File f : files) {
+                    if (!f.isDirectory()) {
                         Pattern pattern = Pattern.compile(fileName);
-                        Matcher m = pattern.matcher(file1.getName());
+                        Matcher m = pattern.matcher(f.getName());
                         if (m.matches()) {
-                            fileList.add(dirName+"\\"+file1.getName());
+                            fileList.add(dirName+"\\"+f.getName());
                         }
                     }
                 }

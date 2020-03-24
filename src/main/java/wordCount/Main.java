@@ -1,20 +1,18 @@
 package wordCount;
 
-import wordCount.CountUtils;
-
 import java.io.*;
 import java.util.ArrayList;
 public class Main{
-        private static boolean IS_COUNTCHAR = false;
-        private static boolean IS_COUNTWORD = false;
-        private static boolean IS_COUNTLINE = false;
-        private static boolean IS_RECURSION = false;
-        private static boolean IS_COUNTDIFFLINE = false;
+        private static boolean isCountchar = false;
+        private static boolean isCountword = false;
+        private static boolean isCountline = false;
+        private static boolean isRecursion = false;
+        private static boolean isCountdiffline = false;
         //利用arraylist存储符合条件的文件的绝对路径
         private static ArrayList<String> fileList = new ArrayList<String>();
 
         public static void main(String[] args) throws IOException,ArrayIndexOutOfBoundsException{
-            /*此处args似乎越界了，我应该给它分配一个数组空间？*/
+            //此处args似乎越界了也许我应该给它分配一个空间？
             //args = new String[6];
             //运行报错了但是测试可以通过
             //默认最后一个参数为路径名
@@ -23,19 +21,19 @@ public class Main{
             //判断需要执行的功能
             for(int i=0; i<args.length-1; i++){
                 if(args[i].equals("-c")){
-                    IS_COUNTCHAR = true;
+                    isCountchar = true;
                 }
                 if(args[i].equals("-w")){
-                    IS_COUNTWORD = true;
+                    isCountword = true;
                 }
                 if(args[i].equals("-l")){
-                    IS_COUNTLINE = true;
+                    isCountline = true;
                 }
                 if(args[i].equals("-s")){
-                    IS_RECURSION = true;
+                    isRecursion = true;
                 }
                 if(args[i].equals("-a")){
-                    IS_COUNTDIFFLINE = true;
+                    isCountdiffline = true;
                 }
             }
             //获取目录名
@@ -66,7 +64,7 @@ public class Main{
             fileName = fileName.replaceAll("\\*","\\.+").replaceAll("\\?","\\.");
 
             //若IS_RECURSION,则使用递归获取文件名（包括子目录），否则只获取当前目录下符合条件的文件名
-            if (IS_RECURSION){
+            if (isRecursion){
                 countUtils.getRecursionFiles(dirName, fileName);
             }else{
                 countUtils.getFiles(dirName,fileName);
@@ -74,20 +72,20 @@ public class Main{
             fileList = countUtils.fileList;
 
             //遍历fileList,对每一个文件使用选择的功能
-            for (String item :
+            for (String fList :
                     fileList) {
-                System.out.println("文件路径为："+item);
-                if (IS_COUNTCHAR){
-                    countUtils.countChar(item);
+                System.out.println("文件路径为："+fList);
+                if (isCountchar){
+                    countUtils.countChar(fList);
                 }
-                if (IS_COUNTWORD){
-                    countUtils.countWord(item);
+                if (isCountword){
+                    countUtils.countWord(fList);
                 }
-                if (IS_COUNTLINE){
-                    countUtils.countLine(item);
+                if (isCountline){
+                    countUtils.countLine(fList);
                 }
-                if (IS_COUNTDIFFLINE){
-                    countUtils.countDiffline(item);
+                if (isCountdiffline){
+                    countUtils.countDiffline(fList);
                 }
             }
         }
